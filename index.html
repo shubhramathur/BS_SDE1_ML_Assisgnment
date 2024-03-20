@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Model Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Language Model Predictor</h1>
+        <input type="text" id="sentence" placeholder="Enter a sentence...">
+        <button onclick="predict()">Predict</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function predict() {
+            var sentence = document.getElementById('sentence').value;
+
+            // Send a POST request to your Flask server
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 'sentence': sentence }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the results
+                document.getElementById('result').innerHTML = `
+                    <p>Bigram Probability: ${data.bigram_probability}</p>
+                    <p>Trigram Probability: ${data.trigram_probability}</p>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
